@@ -1,0 +1,164 @@
+<PUBLIC:ATTACH EVENT="onmouseover" ONEVENT="SpeedBtnShowUp"/>
+<PUBLIC:ATTACH EVENT="onmouseout" ONEVENT="SpeedBtnShowNormal"/>
+<PUBLIC:ATTACH EVENT="onmouseup" ONEVENT="SpeedBtnShowUp"/>
+<PUBLIC:ATTACH EVENT="onmousedown" ONEVENT="SpeedBtnShowDown"/>
+<PUBLIC:ATTACH EVENT="onclick" ONEVENT="SpeedBtnClicked"/>
+<PUBLIC:ATTACH EVENT="onchange" ONEVENT="ComboChanged"/>
+
+<script language=vbscript>
+Sub SpeedBtnShowNormal
+ if element.tagName <> "DIV" then Exit Sub
+ element.className="TSpeedButton"
+End Sub
+
+Sub SpeedBtnShowUp
+ if element.tagName <> "DIV" then Exit Sub
+ element.className="TSpeedButtonUp"
+End Sub
+
+Sub SpeedBtnShowDown
+ if element.tagName <> "DIV" then Exit Sub
+ element.className="TSpeedButtonDown"
+End Sub
+
+
+
+' Trateaza evenimentele OnClick ridicate de SpeedButtons
+Sub SpeedBtnClicked
+ if element.tagName <> "DIV" then Exit Sub
+ if not SelectionInEditPage(element.document.selection) then Exit Sub
+
+ select case LCase(element.id)
+  case "btnbold"          element.document.execCommand "Bold"
+  case "btnitalic"        element.document.execCommand "Italic"
+  case "btnunderline"     element.document.execCommand "Underline"
+  case "btnstrike"        element.document.execCommand "StrikeThrough"
+  case "btnsuperscript"   element.document.execCommand "SuperScript"
+  case "btnsubscript"     element.document.execCommand "SubScript"
+  case "btnalignleft"     element.document.execCommand "JustifyLeft"
+  case "btnaligncenter"   element.document.execCommand "JustifyCenter"
+  case "btnalignright"    element.document.execCommand "JustifyRight"
+  case "btnorderedlist"   element.document.execCommand "InsertOrderedList"
+  case "btnunorderedlist" element.document.execCommand "InsertUnorderedList"
+  case "btnoutdent"       element.document.execCommand "Outdent"
+  case "btnindent"        element.document.execCommand "Indent"
+
+  case "btnalignvertical"     HandleVerticalAlign element.document.selection
+  case "btninsertimage"       HandleInsertImage element.document.selection
+  case "btnpictureleftalign"  AlignPicture "left", element.document.selection
+  case "btnpicturenoalign"    AlignPicture "noalign", element.document.selection
+  case "btnpicturerightalign" AlignPicture "right", element.document.selection
+ end select
+End Sub
+
+
+
+' Trateaza evenimentele OnChange ridicate de ComboBoxes
+Sub ComboChanged
+ if element.tagName <> "SELECT" then Exit Sub
+ if not SelectionInEditPage(element.document.selection) then Exit Sub
+
+ select case LCase(element.id)
+  case "combofontface"    element.document.execCommand "FontName", false, element(element.selectedIndex).value
+  case "combofontsize"    element.document.execCommand "FontSize", false, element(element.selectedIndex).value
+  case "combocolor"       element.document.execCommand "ForeColor", false, element(element.selectedIndex).value
+  case "combobgcolor"     element.document.execCommand "BackColor", false, element(element.selectedIndex).value
+  case "comboborderwidth" PictureBorderWidth element(element.selectedIndex).value, element.document.selection
+  case "combobordercolor" PictureBorderColor element(element.selectedIndex).value, element.document.selection
+ end select
+End Sub
+
+
+
+' Intoarce True daca selectia se afla in interiorul paginii de editare
+' Pagina de editare are className-ul = THTMLEditTextBox
+Function SelectionInEditPage(sel)
+ Dim re
+ 
+ re = false
+ set selrange = sel.createRange
+ if LCase(sel.type) = "control" then
+   set nparent = selrange(0).parentElement
+ else
+   set nparent = selrange.parentElement
+ end if
+ for i=0 to Document.All.Length
+  if UCase(nparent.className) = "THTMLEDITTEXTBOX" then
+    re = true
+    Exit For
+  else  
+    if nparent.tagName <> "HTML" then
+      set nparent = nparent.parentElement
+    else
+      Exit For
+    end if    
+  end if  
+ next
+ SelectionInEditPage = re
+End Function
+
+
+' Se ocupa cu pozitionarea textului pe orizontala sau verticala
+Sub HandleVerticalAlign(sel)
+If LCase(sel.type) <> "control" then
+  set oElem = sel.createRange.parentElement
+  if oElem.currentStyle.writingMode = "tb-rl" then
+	oElem.style.writingMode = "lr-tb"
+  else
+	oElem.style.writingMode = "tb-rl"
+  End If	
+End If	
+End Sub
+
+
+' Intoarce un obiect cu imaginea selectata
+' Daca nu este selectata o imagine din zona de editare atunci
+' nu se intoarce nici un obiect.
+Function GetTargetImage(sel)
+ If LCase(sel.type) = "control" then
+   set oControl = sel.createRange
+   if oControl.Length = 1 then _
+     if oControl(0).tagName = "IMG" then _
+       Set GetTargetImage = oControl(0)
+ End If
+End Function
+
+
+' Se ocupa cu inserarea unei imagini in pagina de editare
+Sub HandleInsertImage(sel)
+  if not IsObject(GetTargetImage(sel)) then _ 
+    ShowAddFileForm FileNumber
+    'element.document.execCommand "InsertImage", true
+End Sub  
+
+
+' Se ocupa cu alinierea unei imagini
+Sub AlignPicture(direction, sel)
+ if not IsObject(GetTargetImage(sel)) then Exit Sub
+ set oImage = GetTargetImage(sel)
+ 
+ if LCase(direction) = "noalign" then
+   oImage.removeAttribute "align", 0
+ else
+   oImage.align = direction
+ end if  
+End Sub
+
+' Se ocupa cu setarea grosimii borderului unei imaginii
+Sub PictureBorderWidth(wid, sel)
+ if not IsObject(GetTargetImage(sel)) then Exit Sub
+ set oImage = GetTargetImage(sel)
+
+ oImage.style.borderWidth = wid
+End Sub
+
+
+' Se ocupa cu setarea culorii borderului unei imaginii
+Sub PictureBorderColor(col, sel)
+ if not IsObject(GetTargetImage(sel)) then Exit Sub
+ set oImage = GetTargetImage(sel)
+
+ oImage.style.borderColor = col
+End Sub
+</script>
+

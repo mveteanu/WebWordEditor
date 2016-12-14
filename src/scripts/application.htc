@@ -1,0 +1,49 @@
+<PUBLIC:ATTACH EVENT="onkeydown" ONEVENT="HandleKeyDown"/>
+<PUBLIC:ATTACH EVENT="oncontextmenu" ONEVENT="HandleContextMenu"/>
+
+<script language=vbscript>
+Sub HandleKeyDown
+ Dim key
+ 
+ key = window.event.keyCode
+ 
+ if key = 116 then    ' Daca se apasa F5 nu se face nimic...
+   CancelKeyEvent
+ elseif key = 8 then  ' Daca se apasa Backspace se verifica unde s-a apasat...
+   If CancelInElement(window.event.srcElement) then CancelKeyEvent
+ end if   
+End Sub
+
+
+Sub HandleContextMenu
+ If CancelInElement(window.event.srcElement) then _
+   window.event.returnValue = false
+End Sub
+
+
+' Anuleaza rularea codului specific evenimentului 
+' produs de apasarea unei taste
+Sub CancelKeyEvent
+   window.event.keyCode = 0
+   window.event.returnValue = false
+End Sub
+
+
+' Se verifica elementul in care a aparut evenimentul de keydown
+' Functia este folosita in momentul in care se apasa Backspace
+Function CancelInElement(elem)
+   Dim re
+  
+   re = true
+   
+   select case elem.tagName
+     case "INPUT" if (LCase(elem.type) = "text") or (LCase(elem.type) = "password") then re = false
+     case "TEXTAREA" re = false
+     case "DIV", "SPAN" if elem.contenteditable = "true" then re = false
+   end select
+   
+   CancelInElement = re 
+End Function
+
+</script>
+

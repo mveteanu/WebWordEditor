@@ -1,0 +1,30 @@
+<H3>Testare securitate IE la upload-ul fisierelor</H3>
+
+<form  name="formupload" method=post enctype="multipart/form-data" action="upltst.asp">
+<input type=file   name="imagine" value="d:\images\catz.gif">
+<input type=submit name="submit"  value="Trimite">
+</form>
+
+<br>
+<input id=but1 type=button value="Seteaza valoare 1">
+<input id=but2 type=button value="Seteaza valoare 2">
+<input id=but3 type=button value="Seteaza valoare 3">
+<input id=but4 type=button value="Arata HTML">
+
+<script language=vbscript>
+sub but1_onclick
+ formupload.imagine.value = "d:\images\catz.gif"
+end sub
+
+sub but2_onclick
+ formupload.insertAdjacentHTML "beforeEnd", "<input type=file value='d:\images\catz.gif'>"
+end sub
+
+sub but3_onclick
+ formupload.imagine.click 
+end sub
+
+sub but4_onclick
+ msgbox formupload.innerHTML 
+end sub
+</script>
