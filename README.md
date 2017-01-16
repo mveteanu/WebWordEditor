@@ -15,5 +15,4 @@ Web Word Editor was created for the [PowerTests.NET](https://github.com/mveteanu
 
 An article around Web Word Editor has been published in the technical magazine "NET Report". You can find the article in the [/doc](/doc) folder.
 
-VMA
-
+![Analytics](https://ga-beacon.appspot.com/UA-2402433-6/beacon.en.html)
