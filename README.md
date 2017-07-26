@@ -8,8 +8,8 @@ As of now Web Word Editor requires IE5.5
 
 Using this project you can edit rich documents with formatting and images.
 
-![Document Editor](https://github.com/mveteanu/WebWordEditor/tree/master/img/Document Editor.png)
-![Document Viewer](https://github.com/mveteanu/WebWordEditor/tree/master/img/Document Viewer.png)
+![Document Editor]("https://github.com/mveteanu/WebWordEditor/tree/master/img/Document Editor.png")
+![Document Viewer]("https://github.com/mveteanu/WebWordEditor/tree/master/img/Document Viewer.png")
 
 Web Word Editor was created for the [PowerTests.NET](https://github.com/mveteanu/PowerTests.NET) project.
 
