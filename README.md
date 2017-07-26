@@ -11,7 +11,14 @@ Using this project you can edit rich documents with formatting and images.
 ![Document Editor](img/Document_Editor.png)
 ![Document Viewer](img/Document_Viewer.png)
 
+PowerTests.NET
+--------------
+
 Web Word Editor was created for the [PowerTests.NET](https://github.com/mveteanu/PowerTests.NET) project.
+
+
+Magazine article
+----------------
 
 An article around Web Word Editor has been published in the technical magazine "NET Report". You can find the article in the [/doc](/doc) folder.
 
